@@ -94,7 +94,7 @@ const tripsAddTrip = async (req, res) => {
                 image: req.body.image,
                 description: req.body.description
                 },
-            (err, trip) => {
+                (err, trip) => {
                 if (err) {
                     return res
                     .status(400) // bad request

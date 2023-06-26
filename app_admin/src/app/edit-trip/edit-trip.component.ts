@@ -9,7 +9,6 @@ import { TripDataService } from 'src/services/trip-data.service';
   styleUrls: ['./edit-trip.component.css']
 })
 export class EditTripComponent implements OnInit {
-
   editForm: FormGroup;
   submitted = false;
 

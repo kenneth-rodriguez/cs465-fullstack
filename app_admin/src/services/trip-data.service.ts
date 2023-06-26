@@ -1,12 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { AuthResponse } from 'src/app/models/authresponse';
 import { BROWSER_STORAGE } from 'src/app/storage';
 import { Trip } from 'src/app/models/trip';
 import { User } from 'src/app/models/user';
 
-@Injectable()
+@Injectable(
+  { providedIn: 'root' }
+)
 export class TripDataService {
 
   constructor(private http: Http, @Inject(BROWSER_STORAGE) private storage: Storage) { }
@@ -34,8 +37,12 @@ export class TripDataService {
 
   public addTrip(formData: Trip): Promise<Trip> {
     console.log('Inside TripDataService#addTrip');
+    // token for authentication. this is frustrating.
+    const token = this.storage.getItem('travlr-token');
+    const headers = new Headers({ 'Authorization': `Bearer ${token}`});
+    
     return this.http
-      .post(this.tripUrl, formData)
+      .post(this.tripUrl, formData, { headers })
       .toPromise()
       .then(response => response.json() as Trip[])
       .catch(this.handleError);
@@ -43,9 +50,14 @@ export class TripDataService {
 
   public updateTrip(formData: Trip): Promise<Trip> {
     console.log('Inside TripDataService#updateTrip');
+    // token for authentication. this is frustrating.
+    const token = this.storage.getItem('travlr-token');
+    const headers = new Headers({ 'Authorization': `Bearer ${token}`});
+
     console.log(formData);
+
     return this.http  
-      .put(this.tripUrl + formData.code, formData)
+      .put(this.tripUrl + formData.code, formData, { headers })
       .toPromise()
       .then(response => response.json() as Trip[])
       .catch(this.handleError);
